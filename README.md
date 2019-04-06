@@ -180,13 +180,14 @@ We present the prime implicant using the same way
   ```
 
 <b>Parameters setting</b><br/>
-  In our opinion, the default parameters/arguments values are OK, but not the best; and you can make them better if you're willing to invest time in learning how to set the parameters/arguments.
-  - startT, the uppper temperature is not suggested to be very high, as more false pis would be introduced; and if it is too low, then only a 'local' solution space will be searched. But a higher termperature is still better than a lower one.
-  - endT, as the probability of acceptation depends on the temperature, we suggest tune it according to the number of acception iterations. You can print the acceptances/the quality of solutions if you want. In general, if there are many acceptances, lower end is better; if no acceptance in a row, raise it a bit.
-  - maxIter, the number of iterations. This iterations actually is related to the temperature and the scale of the dataset. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. 
+  In our opinion, the default parameters/arguments values are OK for small networks (<=10 nodes), but not the best; and you can make them better if you're willing to invest time in learning how to set the parameters/arguments.
+  - startT, the uppper temperature is not suggested to be very high, as more false pis would be introduced; and if it is too low, then only a 'local' solution space will be searched. But a higher termperature is still better than a lower one. Normally, we set it as 2.
+  - endT, as the probability of acceptation depends on the temperature, we suggest tune it according to the number of acception iterations. You can print the acceptances/the quality of solutions if you want. In general, if there are many acceptances, lower end is better; if no acceptance in a row, raise it a bit. By default we set it to be -2.
+  - maxIter, the number of iterations. This iterations actually is related to the temperature and the scale of the dataset. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. By default we set it to be 5000-10000.
   By the way, it is very easy to make ATEN as a feature selection tool before apply Best-Fit. We shall update it later.
-  - However, we have to admit that this investment takes much time...different nodes have differnt in-degree and the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what a thresold is the best, but we think 10000 iterations for >10 nodes performs good.  
-    
+  - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what a thresold is the best, but we think 10000 iterations for >10 nodes performs good.  
+  - And one direction is to make it adaptive for different sizes of networks. It means that adjusting the parameters according to the number of acceptances.
+  
 <br/>
 
 
