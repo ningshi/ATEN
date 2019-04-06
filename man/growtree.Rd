@@ -6,6 +6,17 @@
 \usage{
 growtree(tree, maxK, nodes, penalty = FALSE, fast = TRUE)
 }
+\arguments{
+\item{tree}{An And/Or tree}
+
+\item{maxK}{The size of the tree, or the maximum number of input genes; By defalt, maxK=8}
+
+\item{nodes}{The number of nodes in the Boolean network}
+
+\item{penalty}{TRUE or FALSE used to control the size of the tree}
+
+\item{fast}{An argument used to indicate whether a sort is needed}
+}
 \value{
 an And/Or tree
 }

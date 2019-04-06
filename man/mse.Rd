@@ -18,7 +18,7 @@ mse(input, resp, tree1, tree2, nodes)
 \item{nodes}{the number of nodes in the Boolean network}
 }
 \value{
-the difference between the output of tree1 and tree2. If a negative value is returned, then tree1 is better. If a positive value is returned, the tree2 is better. If zero is return, then tree1 and tree2 are equally good.
+the output difference between the output of tree1 and tree2. If a negative value is returned, then tree1 is better. If a positive value is returned, the tree2 is better. If zero is return, then tree1 and tree2 are equally good.
 }
 \description{
 Given a data matrix with respond, try to find which tree is more predictive. The output of each tree is compared with the standard respond.

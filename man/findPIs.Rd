@@ -19,7 +19,7 @@ rate represents how many non-important PIs are removed in each recursion.
 nodes represents the number of node in the Boolean network}
 }
 \value{
-a set of important prime implicants
+A set of important prime implicants. Or if only a few prime implicants are found, then a final Boolean function will be generated afterwards.
 }
 \description{
 Given a time-series data, try to find the important prime implicants that are predictive for the gene expression level of a target gene
@@ -46,7 +46,10 @@ datasamples$respoutbag<-matrix(datasamples$respoutbag[,target])
 
 ## Initilize the parameters
 parameters<-c(startT=2,endT=-1,maxIter=5000,maxK=8,rate=0.2,nodes=ngenes)
+
+## Try to find the prime implicants
 PIs<-findPIs(B=10,datalist,datasamples,parameters)
+
 
 }
 \seealso{

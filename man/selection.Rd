@@ -7,7 +7,7 @@
 selection()
 }
 \value{
-an And/Or tree
+a vector encoding the parameters used for tree growth
 }
 \description{
 A helper function for tuning tree growth

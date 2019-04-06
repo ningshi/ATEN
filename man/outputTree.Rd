@@ -9,9 +9,9 @@ outputTree(tree, input, nodes)
 \arguments{
 \item{tree}{An And/Or tree}
 
-\item{input}{a data matrix, each row is a time point, each column is a node/gene}
+\item{input}{A data matrix, each row is a time point, each column is a node/gene.}
 
-\item{nodes}{the number of nodes in the Boolean network}
+\item{nodes}{The number of nodes in the Boolean network}
 }
 \value{
 a vector of the output of the tree

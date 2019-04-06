@@ -9,7 +9,7 @@ evolTree(tree, input, nodes)
 \arguments{
 \item{tree}{An And/Or tree}
 
-\item{input}{a data matrix, each row is a time point, each column corresponds to a node/gene in the tree}
+\item{input}{a data matrix, each row is a time point, each column corresponds to a node/gene of the tree}
 
 \item{nodes}{the number of nodes in the Boolean network}
 }

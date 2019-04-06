@@ -14,7 +14,7 @@ findBF(B, PIs, target, parameters, datalist, datasamples)
 \item{target}{The integer indicating which node is the target node}
 
 \item{parameters}{A vector includes 6 parameters; startT, endT and maxIter refer to the upper, lower temperature (on a log10 scale) and the maximum number of iterations used in simulated annealing algorithm
-maxK represents the maximum number of input nodes of the target node (the maximum number of leaves in an And/Or tree), it is required when prior knowledge, e.g. the in-degree is 8, is available. If such information is not known, then it can be set as a very large value, e.g. '.Machine$integer.max'
+maxK represents the maximum number of input nodes of the target node (the size of the tree), it is required when prior knowledge, e.g. the in-degree is 8, is available. If such information is not known, then it can be set as a very large value, e.g. '.Machine$integer.max'
 rate represents how many non-important PIs are removed in each recursion.
 nodes represents the number of node in the Boolean network}
 
@@ -37,6 +37,8 @@ datalist[[3]]<-matrix(datalist[[3]][,target])
 datasamples<-bootstrap(datalist)
 datasamples$respinbag<-matrix(datasamples$respinbag)
 datasamples$respoutbag<-matrix(datasamples$respoutbag)
+
+parameters<-c(startT=2,endT=-1,maxIter=2000,maxK=8,rate=0.2,nodes=10)
 
 ## Identify the final Boolean function with 5 trees in the forest
 findBF(5,PIs,target,parameters,datalist,datasamples)

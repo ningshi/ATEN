@@ -7,6 +7,21 @@
 growtree2(tree, pis, maxK, currentnodes, allnodes, penalty = FALSE,
   fast = TRUE)
 }
+\arguments{
+\item{tree}{an And/Or tree}
+
+\item{pis}{A list of prime implicants; Each prime implicant is a leaf}
+
+\item{maxK}{The size of the tree, or the maximum number of input genes; By defalt, maxK=8}
+
+\item{currentnodes}{The number of prime implicants that used for inferring a tree}
+
+\item{allnodes}{The number of genes in the Boolean network}
+
+\item{penalty}{TRUE or FALSE used to control the size of the tree}
+
+\item{fast}{A argument used to indicate whether a sort is needed}
+}
 \value{
 An And/Or tree
 }

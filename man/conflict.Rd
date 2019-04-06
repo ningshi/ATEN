@@ -2,9 +2,16 @@
 % Please edit documentation in R/ATEN.R
 \name{conflict}
 \alias{conflict}
-\title{Tautology}
+\title{Tautology elimination}
 \usage{
 conflict(pi1, pi2, allnodes)
+}
+\arguments{
+\item{pi1}{A prime implicant}
+
+\item{pi2}{Another prime implicant}
+
+\item{allnodes}{The number of genes in the Boolean network}
 }
 \value{
 TRUE/False

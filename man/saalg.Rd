@@ -11,11 +11,11 @@ saalg(data, maxK, tree, initT, endT, iter)
 
 \item{tree}{A initial tree}
 
-\item{initT}{the uppper temperature}
+\item{initT}{the upper temperature (on a log10 scale)}
 
-\item{endT}{the lower temperature}
+\item{endT}{the lower temperature (on a log10 scale)}
 
-\item{iter}{the maximum number of iterations}
+\item{iter}{the maximum number of iterations used in simulated annealing algorithm}
 
 \item{maxk}{The maximum number of leaves/genes in the And/Or tree}
 }

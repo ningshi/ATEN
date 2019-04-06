@@ -7,9 +7,31 @@
 growand2(tree, subtree, pis, maxK, currentnodes, allnodes,
   penalty = FALSE, dec)
 }
+\arguments{
+\item{tree}{An And/Or tree}
+
+\item{subtree}{A subtree, i.e. a prime implicant}
+
+\item{pis}{A list of prime implicants; Each prime implicant is a leaf}
+
+\item{maxK}{The size of the tree, or the maximum number of input genes; By defalt, maxK=8}
+
+\item{currentnodes}{The number of prime implicants that used for inferring a tree}
+
+\item{allnodes}{The number of genes in the Boolean network}
+
+\item{penalty}{TRUE or FALSE used to control the size of the tree}
+
+\item{dec}{An argument used to control the tree growth}
+
+\item{fast}{An argument used to indicate whether a sort is needed}
+}
 \value{
-an And/Or tree
+An And/Or tree
 }
 \description{
+A helper function for running tree-growth while each leaf is a prime implicant
+}
+\details{
 A helper function for running tree-growth while each leaf is a prime implicant
 }
