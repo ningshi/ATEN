@@ -8,5 +8,5 @@ Description: And/Or Tree Ensemble for inferring Boolean network.
 Depends: R (>= 3.5.0)
 Encoding: UTF-8
 LazyData: true
-Imports: BoolNet, stats, utils 
+Imports: BoolNet, parallel 
 RoxygenNote: 6.1.1
