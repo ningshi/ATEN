@@ -193,7 +193,7 @@ findPIs<-function(B,datalist,datasamples,parameters){
   nameOfpis<-nameOfpis[tl]
   if(Importances[1]>sum(Importances)*0.95){
       new_nameOfpis<-paste0(PIs[[1]],collapse = "&")
-      new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,PIs)
+      new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
       rs<-paste0(rs,collapse = " || ")
       cat("the final Boolean function of node", target, "is returned \n")
@@ -205,8 +205,8 @@ findPIs<-function(B,datalist,datasamples,parameters){
     tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
     PIs<-unique(unlist(tree,recursive = F))
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
-    new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,PIs)
-    rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
+    new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
+    rs<-sapply(new_nameOfpis,changeName,nnodes)
     rs<-paste0(rs,collapse = " || ")
     cat("the final Boolean function of node", target, "is returned \n")
     return(rs)
@@ -267,7 +267,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples){
     PIs<-minimization(PIs,length(nameOfpis))
     if(all(sapply(PIs,length)==1)){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
-      new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,PIs)
+      new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       nameOfpis<-new_nameOfpis
       datalist[[2]]<-datalist[[2]][,unlist(PIs)]
       break
@@ -277,7 +277,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples){
     Importances<-Importances[orders]
     PIs<-PIs[orders]
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
-    new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,PIs)
+    new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
     datasamples<-bootstrap(datalist)
     datasamples$respinbag<-matrix(datasamples$respinbag)
@@ -293,8 +293,8 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples){
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
-  new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,PIs)
-  rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
+  new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
+  rs<-sapply(new_nameOfpis,changeName,nnodes)
   rs<-paste0(rs,collapse = " || ")
   cat("the final Boolean function of node", target, "is returned")
   return(rs)
