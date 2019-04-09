@@ -288,7 +288,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples){
     if(count==10)
       break
   }
-  print(PIs)
+  #print(PIs)
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
@@ -339,8 +339,9 @@ saalg2<-function(data,maxK,tree,initT,endT,iter,pis,allnodes){
     newtree<-growtree2(oldtree,pis,maxK,currentnodes,allnodes)
     prob<-min(1,exp(mse(input,resp,oldtree,newtree,currentnodes)/T))
     temp<-runif(1)
-    if(is.element(count,(iter/10)*(1:10))){
-      T<-T/(abs(initT)+abs(endT))
+    cse<-abs(initT)+abs(endT)
+    if(is.element(count,(iter/cse)*(1:cse))){
+      T<-T/10
     }
     if(T<=10^endT){
       break
@@ -1101,14 +1102,15 @@ saalg<-function(data,maxK,tree,initT,endT,iter){
   count<-1
   oldtree<-tree
   const<-oldtree
-  advexit<-1
+  #advexit<-1
   repeat{
     count<-count+1
     newtree<-growtree(oldtree,maxK=maxK,nodes=nodes)
     prob<-min(1,exp(mse(input,resp,oldtree,newtree,nodes)/T))
     temp<-runif(1)
-    if(is.element(count,(iter/10)*(1:10))){
-      T<-T/(abs(initT)+abs(endT))
+    cse<-abs(initT)+abs(endT)
+    if(is.element(count,(iter/cse)*(1:cse))){
+      T<-T/10
     }
     #T<-T*0.98
     if(T<=10^endT)
@@ -1250,8 +1252,13 @@ changeName<-function(singlename,ngenes){
       return(paste0("Gene",pis))
   }
   for(i in 1:length(pis)){
-    if(as.numeric(pis[i])>ngenes)
-      pis[i]<-paste0("!Gene",as.numeric(pis[i])-ngenes)
+    temp<-as.numeric(pis[i])
+    if(temp>2*ngenes){
+      warnings("The genes exist in the name is greater than the number of genes in the Boolean Network")
+      return("NULL")
+    }
+    if(temp>ngenes)
+      pis[i]<-paste0("!Gene",temp-ngenes)
     else
       pis[i]<-paste0("Gene",pis[i])
   }
