@@ -176,17 +176,20 @@ We present the prime implicant using the same way
   # 1) only 1 PI left after eliminating the non-important ones;
   # 2) after elimination, only a few PIs (=<4) left, we then directly build a And/Or tree.
   # Think about the 2nd issue, actually a better way is to invoke Best-Fit method there to find the optimal solution. 
-  # And also, we can enlarge the threshold (e.g. 8) as Best-Fit can always handles such small netowkrs with good performance.
+  # And also, we can enlarge the threshold (e.g. 8) as Best-Fit can always handles such small networks with good performance.
   ```
 
 <b>Parameters setting</b><br/>
   In our opinion, the default parameters/arguments values are OK for small networks (<=10 nodes), but not the best; and you can make them better if you're willing to invest time in learning how to set the parameters/arguments. 
+  - B, the number of And/Or trees in ATEN. This parameter always depends on the size/noise of the data. We suggest you set a higher B for large/noisy networks. If you set a very large B, although it won't affect the results much, but it takes much time... 
   - startT, the uppper temperature is not suggested to be very high, as more false pis would be introduced; and if it is too low, then only a 'local' solution space will be searched. But a higher termperature is still better than a lower one. Normally, we set it as 2.
   - endT, as the probability of acceptation depends on the temperature, we suggest tune it according to the number of acception iterations. You can print the acceptances/the quality of solutions if you want. In general, if there are many acceptances, lower end is better; if no acceptance in a row, raise it a bit.  Normally, we set it as a negative value less than -2. 
    Note that we run tree growth at fixed temperature until the iteration exceed a threshold. It also can be changed. Users can try to use another cooling scheme. One idea is to adjust the cooling scheme to the number of acceptances. And also any other good SA algorithm is also welcome to be introduced (which we will make it soon).
   - maxIter, the number of iterations. This iterations actually is related to the temperature and the scale of the dataset. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. By default we set it as a value between 5000 and 10000.
-  By the way, it is very easy to make ATEN as a feature selection tool before apply Best-Fit. We shall update it later.
+  By the way, it is very easy to make ATEN as a feature selection tool before applying Best-Fit (i.e. finding all putative Boolean functions). We shall update it later.
   - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what a thresold is the best, but we think 10000 iterations for >10 nodes performs good.  
+  
+ Someone would be interested in how to set the tree size. We have discuss more details in our Supplementary Data. In a word, the true positive rate (TPR or Recall) would increase gradually and become stable when the tree size is greater than a specific threshold. And the false postive rate would increase gradually as more and more false positive interactions would be included.
   
   
  <b>Future work</b><br/> 
