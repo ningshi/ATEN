@@ -1,7 +1,7 @@
 # ATEN
 And/Or Tree Ensemble for inferring accurate Boolean network topology and dynamics 
 
-Note: In the previous version, the results cannot be reproducible as set.seed() does not suitable for the parallel pacakge. Instead, we added function clusterSetRNGStream() to make the results reproducible.
+Note: In the previous version, please note that set.seed() is not suitable for the Package parallel. Instead, we introduced function clusterSetRNGStream(cl,iseed) to make the results reproducible, more deatails see Pacakge parallel.
 
 ```
 # Install devtools from CRAN
