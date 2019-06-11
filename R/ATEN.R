@@ -175,7 +175,7 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
     return(tree)})
   parallel::stopCluster(cl)
   rm(cl)
-  #cat("All trees build \n")
+  cat("All trees build \n")
   Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
   orders<-order(Importances,decreasing = T)
   Importances<-Importances[orders]
@@ -209,6 +209,9 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
     PIs<-unique(unlist(tree,recursive = F))
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
+    PIs<-lapply(new_nameOfpis,function(x) as.integer(unlist(strsplit(x,split = "&"))))
+    PIs<-minimization(PIs,nnodes)
+    new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     rs<-sapply(new_nameOfpis,changeName,nnodes)
     rs<-paste0(rs,collapse = " || ")
     cat("the final Boolean function of node", target, "is returned \n")
@@ -258,7 +261,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   nameOfpis<-sapply(PIs,function(x){paste0(sort(x),collapse = "&")},simplify="array")
   count<-1
   repeat{
-    #cat("starting RFRE \n")
+    cat("starting RFRE \n")
     no_cores <- parallel::detectCores() - 1
     cl <- parallel::makeCluster(no_cores)
     clusterSetRNGStream(cl = cl, seed)
@@ -269,6 +272,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     })
     parallel::stopCluster(cl)
     rm(cl)
+    cat(count)
     Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
     orders<-order(Importances,decreasing = T)
     Importances<-Importances[orders]
@@ -288,6 +292,8 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     }
     if(all(sapply(PIs,length)==1)){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
+      #print("new_nameOfpis is")
+      #print(new_nameOfpis)
       new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       nameOfpis<-new_nameOfpis
       #datalist[[2]]<-datalist[[2]][,unlist(PIs)]
@@ -295,6 +301,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
       break
     }
     PIs<-minimization(PIs,length(nameOfpis))
+    print(PIs)
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
@@ -310,9 +317,18 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
+  #print("PI is")
+  #print(PIs)
   PIs<-PIs[!is.na(PIs)]
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
+  print("new_nameOfpis is")
+  print(new_nameOfpis)
+  PIs<-lapply(new_nameOfpis,function(x) as.integer(unlist(strsplit(x,split = "&"))))
+  PIs<-minimization(PIs,nnodes)
+  print("PI is")
+  print(PIs)
+  new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
   rs<-paste0(rs,collapse = " || ")
   cat("the final Boolean function of node", target, "is returned \n")
@@ -1052,12 +1068,20 @@ evolTree<-function(tree,input,nodes){
 #' A helper function for minimizing the And/Or tree
 #'
 #' @param tree An And/Or tree
-#' @param nodes the number of nodes in the Boolean network
+#' @param nodes The number of nodes in the Boolean network
 #'
 #' @return A minimized tree
 #' @export
 #'
 minimization<-function(tree,nodes){
+  if(all(sapply(tree,length)==1)){
+    temp_tree<-unique(unlist(tree))
+    for(i in 1:length(temp_tree)){
+      if(temp_tree[i]>nodes)
+        temp_tree[i]<-temp_tree[i]-nodes
+    }
+    return(unique(temp_tree))
+  }
   nbranch<-length(tree)
   ntree<-sort(unique(unlist(tree,recursive=TRUE)))
   if(nbranch==1||length(ntree)==1)
