@@ -4,7 +4,7 @@
 \alias{findPIs}
 \title{Find the important prime implicants}
 \usage{
-findPIs(B, datalist, datasamples, parameters)
+findPIs(B, datalist, datasamples, parameters, seed)
 }
 \arguments{
 \item{B}{The number of And/Or trees that used for generating a set of prime}
@@ -48,7 +48,7 @@ datasamples$respoutbag<-matrix(datasamples$respoutbag[,target])
 parameters<-c(startT=2,endT=-1,maxIter=5000,maxK=8,rate=0.2,nodes=ngenes)
 
 ## Try to find the prime implicants
-PIs<-findPIs(B=10,datalist,datasamples,parameters)
+PIs<-findPIs(B=10,datalist,datasamples,parameters,123)
 
 
 }
