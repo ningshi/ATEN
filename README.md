@@ -105,8 +105,8 @@ We present the prime implicant using the same way
   # B represents the how many trees would be generated
   # pars is the argument for parallel computation
   # the relevant datalist and datasamples are also required for network inference
-  # the last parameter 'seed' of PIs() is for helping reproduce the results, we set it as 123 here.
-  PIs<-findPIs(B=5,datalist,datasamples,parameters,123)
+  # the last parameter 'seed' of PIs() is for helping reproduce the results, we set it as 0 here.
+  PIs<-findPIs(B=5,datalist,datasamples,parameters,0)
   
   
   # In our case, we obtained 11 prime implicants after removing non-important ones
@@ -160,8 +160,8 @@ We present the prime implicant using the same way
   datasamples$respoutbag<-matrix(datasamples$respoutbag)
   
   # Identify the final Boolean function
-  # the last parameter of findBF() is for helping reproduce the results, we set it as 123 here.
-  BF<-findBF(5,PIs,target,parameters,datalist,datasamples,123)
+  # the last parameter of findBF() is for helping reproduce the results, we set it as 0 here.
+  BF<-findBF(5,PIs,target,parameters,datalist,datasamples,0)
   
   # Check the final solution we obtained
   >BF
