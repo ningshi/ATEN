@@ -310,7 +310,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
-  PIs[!is.na(PIs)]<-PIs
+  PIs<-PIs[!is.na(PIs)]
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
   rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
