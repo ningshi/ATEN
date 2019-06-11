@@ -269,13 +269,14 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
       new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       nameOfpis<-new_nameOfpis
-      datalist[[2]]<-datalist[[2]][,unlist(PIs)]
+      #datalist[[2]]<-datalist[[2]][,unlist(PIs)]
+      datalist[[2]]<-generateData(PIs,datalist)#
       break
     }
-    Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
+    Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,list(PIs))
     orders<-order(Importances,decreasing = T)
     Importances<-Importances[orders]
-    PIs<-PIs[orders]
+    PIs<-PIs[orders] #PIs[sapply(PIs, is.null)] <- NULL
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
