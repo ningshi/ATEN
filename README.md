@@ -73,7 +73,7 @@ We present the prime implicant using the same way
   # The time-series data will be generated based on the Boolean functions in the network 'net1'
   # numSeries and numPoints refer to the the number of time series and the number of time points, respectively.
   # noiseLevel represents the that a gene state can randomly flipping with the probability (noiseLevel*100)%
-  datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
+  datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0)
   
   ```
 - Step. 3 Select a target node, generate the bootstrap samples and out-of-bag (oob) samples for inferring and selecting prime implicants (PIs)
@@ -109,46 +109,32 @@ We present the prime implicant using the same way
   PIs<-findPIs(B=5,datalist,datasamples,parameters,0)
   
   
-  # In our case, we obtained 11 prime implicants after removing non-important ones
+  # In our case, we obtained 8 prime implicants after removing non-important ones
   > PIs
   [[1]]
   [1] 10
 
   [[2]]
-  [1]  3  7 16
-
-  [[3]]
-  [1]  4 16
-
-  [[4]]
-  [1] 10 14
-
-  [[5]]
   [1] 18
 
+  [[3]]
+  [1] 3 7 16
+
+  [[4]]
+  [1] 4 16
+
+  [[5]]
+  [1] 9
+
   [[6]]
-  [1] 3
-
-  [[7]]
-  [1] 4
-
-  [[8]]
-  [1] 19
-
-  [[9]]
-  [1] 11
-
-  [[10]]
-  [1] 1
-
-  [[11]]
   [1] 14
 
-  [[12]]
-  [1]  7 11
+  [[7]]
+  [1] 1
 
-  [[13]]
-  [1] 9
+  [[8]]
+  [1] 3 18
+
   ```
   -Step. 6 Find the Boolean function according to those PIs and RFRE framework
   ```
