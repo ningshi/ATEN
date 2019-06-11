@@ -267,7 +267,15 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     })
     parallel::stopCluster(cl)
     rm(cl)
+    Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
+    orders<-order(Importances,decreasing = T)
+    Importances<-Importances[orders]
     PIs<-unique(unlist(forest,recursive = F))
+    PIs<-PIs[orders]
+    Importances<-Importances[Importances>0]
+    PIs<-PIs[1:length(Importances)]
+    PIs<-PIs[1:(length(PIs)*(1-parameters[5]))]
+    PIs[sapply(PIs, is.null)] <- NULL#
     if(all(sapply(PIs,length)==1)){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
       new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
@@ -277,14 +285,6 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
       break
     }
     PIs<-minimization(PIs,length(nameOfpis))
-    Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,list(PIs))
-    orders<-order(Importances,decreasing = T)
-    Importances<-Importances[orders]
-    PIs<-PIs[orders]
-    Importances<-Importances[Importances>0]
-    PIs<-PIs[1:length(Importances)]
-    PIs<-PIs[1:(length(PIs)*(1-parameters[5]))]
-    PIs[sapply(PIs, is.null)] <- NULL#
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
@@ -299,7 +299,6 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   }
   #print(PIs)
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
-  #tree<-saalg(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3])
   if(all(sapply(PIs,length)!=1))
     tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
