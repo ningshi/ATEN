@@ -1,5 +1,5 @@
 # ATEN
-And/Or Tree Ensemble for inferring accurate Boolean network topology and dynamics (ATEN v1.1.0)
+And/Or Tree Ensemble for inferring accurate Boolean network topology and dynamics 
 
 Note: In the previous version, the results cannot be reproducible as set.seed() does not suitable for the parallel pacakge. Instead, we added function clusterSetRNGStream() to make the results reproducible.
 
@@ -73,6 +73,7 @@ We present the prime implicant using the same way
   # The time-series data will be generated based on the Boolean functions in the network 'net1'
   # numSeries and numPoints refer to the the number of time series and the number of time points, respectively.
   # noiseLevel represents the that a gene state can randomly flipping with the probability (noiseLevel*100)%
+  # Use set.seed() here if you want to reproduce the results
   datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0)
   
   ```
@@ -105,7 +106,8 @@ We present the prime implicant using the same way
   # B represents the how many trees would be generated
   # pars is the argument for parallel computation
   # the relevant datalist and datasamples are also required for network inference
-  PIs<-findPIs(B=10,datalist,datasamples,parameters)
+  # the last parameter of PIs() is for helping reproduce the results, we set it as 123 here.
+  PIs<-findPIs(B=10,datalist,datasamples,parameters,123)
   
   # In our case, we obtained 12 prime implicants after removing non-important ones
   > PIs
@@ -144,7 +146,8 @@ We present the prime implicant using the same way
   datasamples$respoutbag<-matrix(datasamples$respoutbag)
   
   # Identify the final Boolean function
-  BF<-findBF(5,PIs,target,parameters,datalist,datasamples)
+  # the last parameter of findBF() is for helping reproduce the results, we set it as 123 here.
+  BF<-findBF(5,PIs,target,parameters,datalist,datasamples,123)
   
   # Check the final solution we obtained
   >BF
