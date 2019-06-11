@@ -73,7 +73,7 @@ We present the prime implicant using the same way
   # The time-series data will be generated based on the Boolean functions in the network 'net1'
   # numSeries and numPoints refer to the the number of time series and the number of time points, respectively.
   # noiseLevel represents the that a gene state can randomly flipping with the probability (noiseLevel*100)%
-  datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0)
+  datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
   
   ```
 - Step. 3 Select a target node, generate the bootstrap samples and out-of-bag (oob) samples for inferring and selecting prime implicants (PIs)
