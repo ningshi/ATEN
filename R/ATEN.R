@@ -98,6 +98,7 @@ calImportance<-function(input,resp,forest){
 replaceName<-function(newnames,oldnames,allnodes){
   nnodes<-length(oldnames)
   for(i in 1:length(newnames)){
+      #print(newnames)
       temp<-as.numeric(unique(unlist(strsplit(newnames[i],"&"))))
       f_temp<-temp
       for(ii in 1:length(temp)){
@@ -257,6 +258,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   nameOfpis<-sapply(PIs,function(x){paste0(sort(x),collapse = "&")},simplify="array")
   count<-1
   repeat{
+    cat("starting RFRE \n")
     no_cores <- parallel::detectCores() - 1
     cl <- parallel::makeCluster(no_cores)
     clusterSetRNGStream(cl = cl, seed)
@@ -267,6 +269,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     })
     parallel::stopCluster(cl)
     rm(cl)
+    cat(count)
     Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
     orders<-order(Importances,decreasing = T)
     Importances<-Importances[orders]
@@ -276,8 +279,18 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     PIs<-PIs[1:length(Importances)]
     PIs<-PIs[1:(length(PIs)*(1-parameters[5]))]
     PIs[sapply(PIs, is.null)] <- NULL#
+    if(length(PIs)==1){
+      new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
+      new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
+      nameOfpis<-new_nameOfpis
+      cat("the final Boolean function of node", target, "is returned\n")
+      rs<-changeName(nameOfpis,nnodes)
+      return(rs)
+    }
     if(all(sapply(PIs,length)==1)){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
+      print("new_nameOfpis is")
+      print(new_nameOfpis)
       new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       nameOfpis<-new_nameOfpis
       #datalist[[2]]<-datalist[[2]][,unlist(PIs)]
@@ -298,10 +311,14 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     if(count==10)
       break
   }
-  #print(PIs)
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
+  print("tree is")
+  print(tree)
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
+  print("PI is")
+  print(PIs)
+  PIs[!is.na(PIs)]<-PIs
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
   rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
@@ -338,7 +355,7 @@ saalg2<-function(data,maxK,tree,initT,endT,iter,pis,allnodes){
   if(missing(maxK)){
     maxK<-8
   }
-  if(missing(tree)||is.null(tree)){
+  if(missing(tree)||is.null(tree)||length(a) == 0){
     tree<-list(sample(1:(currentnodes*2),1))
   }
   T<-10^initT
@@ -383,7 +400,7 @@ growtree2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE)
   if(missing(maxK))
     maxK<-8
   #currentnodes<-currentnodes*2 #Boolean variable and its negation
-  if(missing(tree)||is.null(tree)){
+  if(missing(tree)||is.null(tree)||length(tree)==0){
     tree<-sample(currentnodes*2,1)
     return(as.list(tree))
   }
@@ -458,7 +475,10 @@ growor2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE){
     if(is.list(subtree))
       return(subtree)
     if(is.null(subtree)){
-      tree[[nsub]]<-NULL
+      if(length(tree)!=1)
+        tree[[nsub]]<-NULL
+      else
+        return(tree)
       return(tree)
     }
     tree[[nsub]]<-unique(unlist(subtree))
