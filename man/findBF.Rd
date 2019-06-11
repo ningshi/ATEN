@@ -4,7 +4,7 @@
 \alias{findBF}
 \title{RFRE and Boolean function reconstruction}
 \usage{
-findBF(B, PIs, target, parameters, datalist, datasamples)
+findBF(B, PIs, target, parameters, datalist, datasamples, seed)
 }
 \arguments{
 \item{B}{The number of And/Or trees that used for generating a set of prime}
@@ -41,7 +41,7 @@ datasamples$respoutbag<-matrix(datasamples$respoutbag)
 parameters<-c(startT=2,endT=-1,maxIter=2000,maxK=8,rate=0.2,nodes=10)
 
 ## Identify the final Boolean function with 5 trees in the forest
-findBF(5,PIs,target,parameters,datalist,datasamples)
+findBF(5,PIs,target,parameters,datalist,datasamples,123)
 
 }
 \seealso{
