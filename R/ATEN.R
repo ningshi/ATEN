@@ -285,6 +285,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
       break
     }
     PIs<-minimization(PIs,length(nameOfpis))
+    print(PIs)
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
@@ -299,14 +300,13 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   }
   #print(PIs)
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
-  if(all(sapply(PIs,length)!=1))
-    tree<-minimization(tree,ncol(datalist[[2]]))
+  tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
   rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
   rs<-paste0(rs,collapse = " || ")
-  cat("the final Boolean function of node", target, "is returned")
+  cat("the final Boolean function of node", target, "is returned \n")
   return(rs)
 }
 
@@ -437,7 +437,7 @@ growor2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE){
     else
       temp<-pselect[4]*runif(1)+pselect[1]
   }
-  if((temp<pselect[2]||is.null(tree))&&!penalty){
+  else if((temp<pselect[2]||is.null(tree))&&!penalty){
     if(is.null(tree))
       return(list(sample(PandN,1)))
     else
