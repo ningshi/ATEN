@@ -46,6 +46,7 @@ We present the prime implicant using the same way
   # k is the maximum number of genes 
   k<-5
   #call generateRandomNKNetwork to generate a Boolean network, for more deatils about arguments, see BoolNet
+  set.seed(0)
   net1<-generateRandomNKNetwork(ngenes, k, topology="scale_free",simplify=TRUE,readableFunctions=TRUE)
   
   # see net1
@@ -56,24 +57,22 @@ We present the prime implicant using the same way
   Gene1 Gene2 Gene3 Gene4 Gene5 Gene6 Gene7 Gene8 Gene9 Gene10
 
   Transition functions:
-  Gene1 = (Gene10)
-  Gene2 = (Gene9)
-  Gene3 = (!Gene5 & !Gene2) | (Gene9)
-  Gene4 = (!Gene9)
-  Gene5 = (!Gene8)
-  Gene6 = (Gene6)
-  Gene7 = (Gene10)
-  Gene8 = (!Gene9)
-  Gene9 = (Gene5) | (Gene6)
-  Gene10 = (!Gene5)
-  
+  Gene1 = (!Gene1)
+  Gene2 = (Gene8)
+  Gene3 = (Gene10)
+  Gene4 = (Gene10)
+  Gene5 = (Gene2 & Gene3)
+  Gene6 = (Gene4)
+  Gene7 = (!Gene2) | (!Gene5)
+  Gene8 = (!Gene8) | (Gene4)
+  Gene9 = (Gene5)
+  Gene10 = (!Gene3)
   ```
 - Step. 2 Build the time-series data; the datalist is saved in a list as well.
   ```
   # The time-series data will be generated based on the Boolean functions in the network 'net1'
   # numSeries and numPoints refer to the the number of time series and the number of time points, respectively.
   # noiseLevel represents the that a gene state can randomly flipping with the probability (noiseLevel*100)%
-  # Use set.seed() here if you want to reproduce the results
   datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0)
   
   ```
@@ -94,7 +93,7 @@ We present the prime implicant using the same way
   # maxK represents the maximum number of input nodes of the target node (the maximum number of leaves in an And/Or tree), it is required when prior knowledge, e.g. the in-degree is 8, is available. If such information is not known, then it can be set as a very large value, e.g. '.Machine$integer.max'
   # rate represents how many non-important PIs are removed in each recursion.
   # nodes represents the number of node in the Boolean network
-  parameters<-c(startT=2,endT=-1,maxIter=5000,maxK=8,rate=0.2,nodes=ngenes)
+  parameters<-c(startT=2,endT=-1,maxIter=2000,maxK=8,rate=0.2,nodes=ngenes)
   
   # We shall discuss how to tune those arguments later.
   ```
@@ -106,35 +105,50 @@ We present the prime implicant using the same way
   # B represents the how many trees would be generated
   # pars is the argument for parallel computation
   # the relevant datalist and datasamples are also required for network inference
-  # the last parameter of PIs() is for helping reproduce the results, we set it as 123 here.
-  PIs<-findPIs(B=10,datalist,datasamples,parameters,123)
+  # the last parameter 'seed' of PIs() is for helping reproduce the results, we set it as 123 here.
+  PIs<-findPIs(B=5,datalist,datasamples,parameters,123)
   
-  # In our case, we obtained 12 prime implicants after removing non-important ones
+  
+  # In our case, we obtained 11 prime implicants after removing non-important ones
   > PIs
   [[1]]
-  [1] 9
+  [1] 10
+
   [[2]]
-  [1] 12 15
+  [1]  3  7 16
+
   [[3]]
-  [1]  3  9 18
+  [1]  4 16
+
   [[4]]
-  [1] 6
+  [1] 10 14
+
   [[5]]
-  [1] 10 12 15
+  [1] 18
+
   [[6]]
-  [1]  8 10 12 15
+  [1] 3
+
   [[7]]
-  [1] 10 12 15 19
+  [1] 4
+
   [[8]]
-  [1]  9 16
+  [1] 19
+
   [[9]]
-  [1]  8 10 12 15 16
+  [1] 11
+
   [[10]]
-  [1]  4  8 12 15 16 19
+  [1] 1
+
   [[11]]
-  [1]  5 14 15 19
+  [1] 14
+
   [[12]]
-  [1]  1  4  5  9 11
+  [1]  7 11
+
+  [[13]]
+  [1] 9
   ```
   -Step. 6 Find the Boolean function according to those PIs and RFRE framework
   ```
@@ -151,7 +165,7 @@ We present the prime implicant using the same way
   
   # Check the final solution we obtained
   >BF
-  "Gene9 || !Gene2&!Gene5"
+  "Gene10"
   ```
   <b>Something new in ATEN</b>. In some cases, Step. 6 is not required, for instance, using the same Boolean network but with noisy data this time
   ```
@@ -172,7 +186,7 @@ We present the prime implicant using the same way
   
   # See PIs
   > PI
-  [1] "Gene10&!Gene4"
+  [1] "Gene10"
   
   # We can find the result is not a list of PIs but the final Boolean function. 
   # And the final Boolean function  "Gene10&!Gene4" contains the true input node (i.e. Gene10) and a false input node (i.e. Gene4). 
