@@ -57,16 +57,16 @@ We present the prime implicant using the same way
   Gene1 Gene2 Gene3 Gene4 Gene5 Gene6 Gene7 Gene8 Gene9 Gene10
 
   Transition functions:
-  Gene1 = (!Gene1)
-  Gene2 = (Gene8)
-  Gene3 = (Gene10)
-  Gene4 = (Gene10)
-  Gene5 = (Gene2 & Gene3)
-  Gene6 = (Gene4)
-  Gene7 = (!Gene2) | (!Gene5)
-  Gene8 = (!Gene8) | (Gene4)
-  Gene9 = (Gene5)
-  Gene10 = (!Gene3)
+  Gene1 = (Gene9)
+  Gene2 = (!Gene10 & Gene9) | (Gene10 & !Gene9)
+  Gene3 = (Gene1)
+  Gene4 = (Gene4)
+  Gene5 = (Gene2)
+  Gene6 = (!Gene1)
+  Gene7 = (!Gene1 & !Gene9) | (Gene1 & Gene9)
+  Gene8 = (!Gene9)
+  Gene9 = (Gene4)
+  Gene10 = (Gene7)
   ```
 - Step. 2 Build the time-series data; the datalist is saved in a list as well.
   ```
@@ -112,28 +112,28 @@ We present the prime implicant using the same way
   # In our case, we obtained 8 prime implicants after removing non-important ones
   > PIs
   [[1]]
-  [1] 10
-
-  [[2]]
-  [1] 18
-
-  [[3]]
-  [1] 3 7 16
-
-  [[4]]
-  [1] 4 16
-
-  [[5]]
-  [1] 9
-
-  [[6]]
-  [1] 14
-
-  [[7]]
   [1] 1
 
+  [[2]]
+  [1] 4 16
+
+  [[3]]
+  [1] 9
+
+  [[4]]
+  [1] 4 
+
+  [[5]]
+  [1] 3 10
+
+  [[6]]
+  [1] 3
+
+  [[7]]
+  [1] 12
+
   [[8]]
-  [1] 3 18
+  [1] 1 6
 
   ```
   -Step. 6 Find the Boolean function according to those PIs and RFRE framework
@@ -151,15 +151,14 @@ We present the prime implicant using the same way
   
   # Check the final solution we obtained
   >BF
-  "Gene10"
+  "Gene1"
   ```
   <b>Something new in ATEN</b>. In some cases, Step. 6 is not required, for instance, using the same Boolean network but with noisy data this time
   ```
   # Generate the time-series data with 5% noise
-  set.seed(0)
-  datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
+    datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
   
-  # Now selected the first node as the target node
+  # Now selected the fifth node as the target node
   target<-5
   
   # Generate the bootstrap samples and oob samples according to the time-series data
@@ -173,7 +172,7 @@ We present the prime implicant using the same way
   
   # See PIs
   > PIs
-  [1] "Gene3&!Gene8"
+  [1] "Gene2"
   
   # We can find the result is not a list of PIs but the final Boolean function. 
   # And the final Boolean function  "Gene10&!Gene4" contains the true input node (i.e. Gene10) and a false input node (i.e. Gene4). 
