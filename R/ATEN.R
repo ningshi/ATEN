@@ -98,7 +98,6 @@ calImportance<-function(input,resp,forest){
 replaceName<-function(newnames,oldnames,allnodes){
   nnodes<-length(oldnames)
   for(i in 1:length(newnames)){
-      #print(newnames)
       temp<-as.numeric(unique(unlist(strsplit(newnames[i],"&"))))
       f_temp<-temp
       for(ii in 1:length(temp)){
@@ -175,13 +174,11 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
     return(tree)})
   parallel::stopCluster(cl)
   rm(cl)
-  cat("All trees build \n")
   Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
   orders<-order(Importances,decreasing = T)
   Importances<-Importances[orders]
   PIs<-unique(unlist(forest,recursive = F))[orders]
   Importances<-Importances[Importances>0]
-  #print(PIs)
   PIs<-PIs[1:length(Importances)]
   nameOfpis<-sapply(PIs,function(x){paste0(sort(x),collapse = "&")},simplify="array")
   if(length(PIs)==1){
@@ -203,14 +200,20 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
       return(rs)
   }
   if(length(PIs)<=4){
+    #A better approach to find the optimal solution is to introduce Best-fit here.
     datalist[[2]]<-generateData(PIs,datalist)
-    datalist[[3]]<-matrix(datalist[[3]])
+    datalist[[3]]<-matrix(datalist[[3]][,target])
     tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
     PIs<-unique(unlist(tree,recursive = F))
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     PIs<-lapply(new_nameOfpis,function(x) as.integer(unlist(strsplit(x,split = "&"))))
     PIs<-minimization(PIs,nnodes)
+    if(length(unlist(PIs))==1){
+      if(as.numeric(unlist(PIs))==1){
+        return("This node is probably a self-controlled node")
+      }
+    }
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     rs<-sapply(new_nameOfpis,changeName,nnodes)
     rs<-paste0(rs,collapse = " || ")
@@ -272,7 +275,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     })
     parallel::stopCluster(cl)
     rm(cl)
-    cat(count)
+    #cat(count)
     Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
     orders<-order(Importances,decreasing = T)
     Importances<-Importances[orders]
@@ -292,8 +295,6 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     }
     if(all(sapply(PIs,length)==1)){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
-      #print("new_nameOfpis is")
-      #print(new_nameOfpis)
       new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       nameOfpis<-new_nameOfpis
       #datalist[[2]]<-datalist[[2]][,unlist(PIs)]
@@ -301,7 +302,6 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
       break
     }
     PIs<-minimization(PIs,length(nameOfpis))
-    print(PIs)
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
@@ -317,17 +317,11 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
-  #print("PI is")
-  #print(PIs)
   PIs<-PIs[!is.na(PIs)]
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
-  print("new_nameOfpis is")
-  print(new_nameOfpis)
   PIs<-lapply(new_nameOfpis,function(x) as.integer(unlist(strsplit(x,split = "&"))))
   PIs<-minimization(PIs,nnodes)
-  print("PI is")
-  print(PIs)
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
   rs<-paste0(rs,collapse = " || ")
@@ -363,7 +357,7 @@ saalg2<-function(data,maxK,tree,initT,endT,iter,pis,allnodes){
   if(missing(maxK)){
     maxK<-8
   }
-  if(missing(tree)||is.null(tree)||length(a) == 0){
+  if(missing(tree)||is.null(tree)||length(tree) == 0){
     tree<-list(sample(1:(currentnodes*2),1))
   }
   T<-10^initT
@@ -462,13 +456,14 @@ growor2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE){
     else
       temp<-pselect[4]*runif(1)+pselect[1]
   }
-  else if((temp<pselect[2]||is.null(tree))&&!penalty){
+  if((temp<pselect[2]||is.null(tree))&&!penalty){
     if(is.null(tree))
       return(list(sample(PandN,1)))
     else
       tree<-c(tree,sample(PandN,1))
   }
   else{
+    nbranch<-length(tree)
     nsub<-sample(1:branch,1)
     if(temp<pselect[3])
       dec<-1
@@ -487,6 +482,7 @@ growor2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE){
         tree[[nsub]]<-NULL
       else
         return(tree)
+        #return(list(sample(PandN,1)))
       return(tree)
     }
     tree[[nsub]]<-unique(unlist(subtree))
@@ -914,6 +910,7 @@ growor<-function(tree,nodes,penalty=FALSE,fast=TRUE){
     }
   }
   else{
+    nbranch<-length(tree)
     nsub<-sample(1:nbranch,1)
     subtree<-tree[[nsub]]
     if(temp<pselect[3])
@@ -1080,12 +1077,23 @@ minimization<-function(tree,nodes){
       if(temp_tree[i]>nodes)
         temp_tree[i]<-temp_tree[i]-nodes
     }
+    if(any(duplicated(temp_tree)))
+      return(1)
     return(unique(temp_tree))
   }
   nbranch<-length(tree)
   ntree<-sort(unique(unlist(tree,recursive=TRUE)))
   if(nbranch==1||length(ntree)==1)
       return(tree[1])
+  for(i in 1:nbranch){
+    temp_tree<-unique(unlist(tree[[i]]))
+    for(i in 1:length(temp_tree)){
+      if(temp_tree[i]>nodes)
+        temp_tree[i]<-temp_tree[i]-nodes
+    }
+    if(any(duplicated(temp_tree)))
+      return(1)
+  }
   positive<-ntree[(ntree-nodes)<=0]
   reserve<-ntree[which(ntree>nodes)]
   negative<-reserve-nodes
