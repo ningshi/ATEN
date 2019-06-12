@@ -147,7 +147,7 @@ We present the prime implicant using the same way
   
   # Identify the final Boolean function
   # the last parameter of findBF() is for helping reproduce the results, we set it as 0 here.
-  BF<-findBF(5,PIs,target,parameters,datalist,datasamples,0)
+  BF<-findBF(10,PIs,target,parameters,datalist,datasamples,0)
   
   # Check the final solution we obtained
   >BF
@@ -156,10 +156,11 @@ We present the prime implicant using the same way
   <b>Something new in ATEN</b>. In some cases, Step. 6 is not required, for instance, using the same Boolean network but with noisy data this time
   ```
   # Generate the time-series data with 5% noise
+  set.seed(0)
   datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
   
   # Now selected the first node as the target node
-  target<-1
+  target<-5
   
   # Generate the bootstrap samples and oob samples according to the time-series data
   datasamples<-bootstrap(datalist)
@@ -168,11 +169,11 @@ We present the prime implicant using the same way
   datasamples$respoutbag<-matrix(datasamples$respoutbag[,target])
   
   # Find the important PIs
-  PIs<-findPIs(B=10,datalist,datasamples,parameters)
+  PIs<-findPIs(B=10,datalist,datasamples,parameters,0)
   
   # See PIs
-  > PI
-  [1] "Gene10"
+  > PIs
+  [1] "Gene3&!Gene8"
   
   # We can find the result is not a list of PIs but the final Boolean function. 
   # And the final Boolean function  "Gene10&!Gene4" contains the true input node (i.e. Gene10) and a false input node (i.e. Gene4). 
