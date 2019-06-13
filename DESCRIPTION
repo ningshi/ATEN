@@ -1,7 +1,7 @@
 Package: ATEN
 Type: Package
 Title: ATEN
-Version: 0.1.0
+Version: 0.1.1
 Author: Ning Shi
 Maintainer: Ning Shi <nxs577@cs.bham.ac.uk>
 Description: And/Or Tree Ensemble for inferring Boolean network. 
