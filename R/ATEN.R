@@ -98,6 +98,7 @@ calImportance<-function(input,resp,forest){
 replaceName<-function(newnames,oldnames,allnodes){
   nnodes<-length(oldnames)
   for(i in 1:length(newnames)){
+      #print(newnames)
       temp<-as.numeric(unique(unlist(strsplit(newnames[i],"&"))))
       f_temp<-temp
       for(ii in 1:length(temp)){
@@ -174,6 +175,8 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
     return(tree)})
   parallel::stopCluster(cl)
   rm(cl)
+  cat("All trees build \n")
+  #print(tree)
   Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
   orders<-order(Importances,decreasing = T)
   Importances<-Importances[orders]
@@ -181,6 +184,8 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
   Importances<-Importances[Importances>0]
   PIs<-PIs[1:length(Importances)]
   nameOfpis<-sapply(PIs,function(x){paste0(sort(x),collapse = "&")},simplify="array")
+  #print(PIs)
+  #print(nameOfpis)
   if(length(PIs)==1){
     cat("only 1 prime implicant was found \n")
     cat("the final Boolean function of node", target, "is returned\n")
@@ -200,7 +205,6 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
       return(rs)
   }
   if(length(PIs)<=4){
-    #A better approach to find the optimal solution is to introduce Best-fit here.
     datalist[[2]]<-generateData(PIs,datalist)
     datalist[[3]]<-matrix(datalist[[3]][,target])
     tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
@@ -209,9 +213,13 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     PIs<-lapply(new_nameOfpis,function(x) as.integer(unlist(strsplit(x,split = "&"))))
     PIs<-minimization(PIs,nnodes)
+    print(PIs)
+    print(new_nameOfpis)
     if(length(unlist(PIs))==1){
       if(as.numeric(unlist(PIs))==1){
-        return("This node is probably a self-controlled node")
+        cat("This node is probably a self-controlled node")
+        name<-changeName(new_nameOfpis,nnodes)
+        return(name)
       }
     }
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
@@ -295,6 +303,8 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
     }
     if(all(sapply(PIs,length)==1)){
       new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
+      #print("new_nameOfpis is")
+      #print(new_nameOfpis)
       new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
       nameOfpis<-new_nameOfpis
       #datalist[[2]]<-datalist[[2]][,unlist(PIs)]
@@ -302,6 +312,7 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
       break
     }
     PIs<-minimization(PIs,length(nameOfpis))
+    #print(PIs)
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
     datalist[[2]]<-generateData(PIs,datalist)
@@ -317,11 +328,17 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   tree<-saalg2(datalist,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
   tree<-minimization(tree,ncol(datalist[[2]]))
   PIs<-unique(unlist(tree,recursive = F))
+  #print("PI is")
+  #print(PIs)
   PIs<-PIs[!is.na(PIs)]
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   new_nameOfpis<-replaceName(new_nameOfpis,nameOfpis,nnodes)
+  #print("new_nameOfpis is")
+  #print(new_nameOfpis)
   PIs<-lapply(new_nameOfpis,function(x) as.integer(unlist(strsplit(x,split = "&"))))
   PIs<-minimization(PIs,nnodes)
+  #print("PI is")
+  #print(PIs)
   new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
   rs<-sapply(new_nameOfpis,changeName,ngenes=nnodes)
   rs<-paste0(rs,collapse = " || ")
@@ -482,8 +499,8 @@ growor2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE){
         tree[[nsub]]<-NULL
       else
         return(tree)
-        #return(list(sample(PandN,1)))
-      return(tree)
+      return(list(sample(PandN,1)))
+      #return(tree)
     }
     tree[[nsub]]<-unique(unlist(subtree))
   }
