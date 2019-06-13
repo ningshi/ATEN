@@ -156,7 +156,7 @@ We present the prime implicant using the same way
   # Generate the time-series data with 5% noise
     datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
   
-  # Now selected the first node as the target node
+  # Now selecte the first node as the target node
   target<-1
   
   # Generate the bootstrap samples and oob samples according to the time-series data
