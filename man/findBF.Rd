@@ -7,7 +7,7 @@
 findBF(B, PIs, target, parameters, datalist, datasamples, seed)
 }
 \arguments{
-\item{B}{The number of And/Or trees that used for generating a set of prime}
+\item{B}{The number of And/Or trees that used for generating a set of new prime implicants}
 
 \item{PIs}{A list of prime implicants}
 
