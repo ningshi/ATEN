@@ -57,16 +57,16 @@ We present the prime implicant using the same way
   Gene1 Gene2 Gene3 Gene4 Gene5 Gene6 Gene7 Gene8 Gene9 Gene10
 
   Transition functions:
-  Gene1 = (Gene9)
-  Gene2 = (!Gene10 & Gene9) | (Gene10 & !Gene9)
-  Gene3 = (Gene1)
-  Gene4 = (Gene4)
-  Gene5 = (Gene2)
-  Gene6 = (!Gene1)
-  Gene7 = (!Gene1 & !Gene9) | (Gene1 & Gene9)
-  Gene8 = (!Gene9)
-  Gene9 = (Gene4)
-  Gene10 = (Gene7)
+  Gene1 = (!Gene1)
+  Gene2 = (Gene8)
+  Gene3 = (Gene10)
+  Gene4 = (Gene10)
+  Gene5 = (Gene2 & Gene3)
+  Gene6 = (Gene4)
+  Gene7 = (!Gene2) | (!Gene5)
+  Gene8 = (!Gene8) | (Gene4)
+  Gene9 = (Gene5)
+  Gene10 = (!Gene3)
   ```
 - Step. 2 Build the time-series data; the datalist is saved in a list as well.
   ```
@@ -79,7 +79,7 @@ We present the prime implicant using the same way
 - Step. 3 Select a target node, generate the bootstrap samples and out-of-bag (oob) samples for inferring and selecting prime implicants (PIs)
   ```
   # For instance, we select the 3rd node as the target node
-  target<-3
+  target<-6
   
   # Generate the bootstrap samples and oob samples according to the time-series data
   datasamples<-bootstrap(datalist)
@@ -93,7 +93,7 @@ We present the prime implicant using the same way
   # maxK represents the maximum number of input nodes of the target node (the maximum number of leaves in an And/Or tree), it is required when prior knowledge, e.g. the in-degree is 8, is available. If such information is not known, then it can be set as a very large value, e.g. '.Machine$integer.max'
   # rate represents how many non-important PIs are removed in each recursion.
   # nodes represents the number of node in the Boolean network
-  parameters<-c(startT=2,endT=-1,maxIter=2000,maxK=8,rate=0.2,nodes=ngenes)
+  parameters<-c(startT=2,endT=-2,maxIter=5000,maxK=5,rate=0.2,nodes=ngenes)
   
   # We shall discuss how to tune those arguments later.
   ```
@@ -106,34 +106,25 @@ We present the prime implicant using the same way
   # pars is the argument for parallel computation
   # the relevant datalist and datasamples are also required for network inference
   # the last parameter 'seed' of PIs() is for helping reproduce the results, we set it as 0 here.
-  PIs<-findPIs(B=5,datalist,datasamples,parameters,0)
+  PIs<-findPIs(B=10,datalist,datasamples,parameters,0)
   
   
-  # In our case, we obtained 8 prime implicants after removing non-important ones
+  # In our case, we obtained 5 prime implicants after removing non-important ones
   > PIs
   [[1]]
-  [1] 1
+  [1] 4
 
   [[2]]
-  [1] 4 16
-
-  [[3]]
-  [1] 9
-
-  [[4]]
-  [1] 4 
-
-  [[5]]
-  [1] 3 10
-
-  [[6]]
   [1] 3
 
-  [[7]]
-  [1] 12
+  [[3]]
+  [1]  4 19
 
-  [[8]]
-  [1] 1 6
+  [[4]]
+  [1]  4  8 19
+
+  [[5]]
+  [1]  4 13 18
 
   ```
   -Step. 6 Find the Boolean function according to those PIs and RFRE framework
@@ -151,7 +142,7 @@ We present the prime implicant using the same way
   
   # Check the final solution we obtained
   >BF
-  "Gene1"
+  "Gene4"
   ```
   <b>Something new in ATEN</b>. In some cases, Step. 6 is not required, for instance, using the same Boolean network but with noisy data this time
   ```
@@ -159,7 +150,7 @@ We present the prime implicant using the same way
     datalist<-buildTimeSeries(network=net1,numSeries=10,numPoints=10,noiseLevel=0.05)
   
   # Now selected the fifth node as the target node
-  target<-5
+  target<-1
   
   # Generate the bootstrap samples and oob samples according to the time-series data
   datasamples<-bootstrap(datalist)
@@ -172,7 +163,7 @@ We present the prime implicant using the same way
   
   # See PIs
   > PIs
-  [1] "Gene2"
+  [1] "!Gene1"
   
   # We can find the result is not a list of PIs but the final Boolean function. 
   # And the final Boolean function  "Gene10&!Gene4" contains the true input node (i.e. Gene10) and a false input node (i.e. Gene4). 
