@@ -198,7 +198,7 @@ We present the prime implicant using the same way
   
   - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what the best threshold is, but we think 10000 iterations for >10 nodes perform well.  
   
- Someone would be interested in how to set the tree size. We have discuss more details in our Supplementary Data. In a word, the true positive rate (TPR or Recall) would increase gradually and become stable when the tree size is greater than a specific threshold. And the false postive rate would increase gradually as more and more false positive interactions would be included.
+ Someone would be interested in how to set the tree size, please find more details in our Supplementary Data. 
   
   
  <b>Future work</b><br/> 
