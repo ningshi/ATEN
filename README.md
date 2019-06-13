@@ -182,13 +182,13 @@ We present the prime implicant using the same way
    Note that we run tree growth at fixed temperature until the iteration exceed a threshold. It also can be changed. Users can try to use another cooling scheme. One idea is to adjust the cooling scheme to the number of acceptances. And also any other good SA algorithm is also welcome to be introduced (which we will make it soon).
   - maxIter, the number of iterations. This iterations actually is related to the temperature and the scale of the dataset. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. By default we set it as a value between 5000 and 10000.
   By the way, it is very easy to make ATEN as a feature selection tool before applying Best-Fit (i.e. finding all putative Boolean functions). We shall update it later.
-  - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what a thresold is the best, but we think 10000 iterations for >10 nodes performs good.  
+  - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what the best threshold is, but we think 10000 iterations for >10 nodes performs well.  
   
  Someone would be interested in how to set the tree size. We have discuss more details in our Supplementary Data. In a word, the true positive rate (TPR or Recall) would increase gradually and become stable when the tree size is greater than a specific threshold. And the false postive rate would increase gradually as more and more false positive interactions would be included.
   
   
  <b>Future work</b><br/> 
-  - Besides what we discuss above, another direction is to make it adaptive for different sizes of networks. 
+  - Besides what we discuss above, another direction is to make it adaptive for different sizes of networks (e.g. implement ATEN using C to speed up ATEN for larger networks). 
   - We also expected our idea can be used for inferrng probabilistic Boolean networks and asynchronous networks.
   
 <br/>
