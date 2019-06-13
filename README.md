@@ -144,7 +144,7 @@ We present the prime implicant using the same way
   
   # Identify the final Boolean function
   # the last parameter used in findBF() is for helping reproduce the results, we set it as 0 here.
-  BF<-findBF(10,PIs,target,parameters,datalist,datasamples,0)
+  BF<-findBF(5,PIs,target,parameters,datalist,datasamples,0)
   
   # Check the final solution we obtained
   >BF
