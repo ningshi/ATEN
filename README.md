@@ -166,7 +166,6 @@ We present the prime implicant using the same way
   [1] "!Gene1"
   
   # We can find the result is not a list of PIs but the final Boolean function. 
-  # And the final Boolean function  "Gene10&!Gene4" contains the true input node (i.e. Gene10) and a false input node (i.e. Gene4). 
   # In this way, Step.6 is not required.
   # There are two reasons:
   # 1) only 1 PI left after eliminating the non-important ones;
