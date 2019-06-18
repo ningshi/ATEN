@@ -179,7 +179,9 @@ We present the prime implicant using the same way
   ```
 
 <b>Parameters setting</b><br/>
-  In our opinion, the default parameters/arguments values are OK for small networks (<=10 nodes), but not the best; and you can make them better if you're willing to invest time in learning how to set the parameters/arguments. 
+  Someone would be interested in how to set the tree size (i.e. the maximum number of input genes of the target gene), please find more details in our Supplementary Data. 
+
+  The other default parameters/arguments values are OK for small networks (<=10 nodes), but not the best; and you can make them better if you're willing to invest time in learning how to set the parameters/arguments. 
   
   - B, the number of And/Or trees in ATEN. This parameter always depends on the size/noise of the data. We suggest you set a higher B for large/noisy networks. If you set a very large B, although it won't affect the results much, but it takes much time... 
   
@@ -187,17 +189,13 @@ We present the prime implicant using the same way
   
   - endT, as the probability of acceptation depends on the temperature, we suggest tune it according to the number of acception iterations. You can print the acceptances/the quality of solutions if you want. In general, if there are many acceptances, lower end is better; if no acceptance in a row, raise it a bit.  Normally, we set it as a negative value smaller than -2. 
   
-   Note that we run tree growth at fixed temperature until the iteration exceed a threshold. It also can be changed. Users can try to use another cooling scheme. One idea is to adjust the cooling scheme to the number of acceptances. And also any other good SA algorithm is also welcome to be introduced (which we will make it soon).
-   
   - maxIter, the number of iterations. This iterations actually is related to the temperature and the scale of the dataset. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. By default we set it as a value between 5000 and 10000.
   
-  By the way, it is very easy to make ATEN as a feature selection tool before applying Best-Fit (i.e. finding all putative Boolean functions). We shall update it later.
+   And also any other good SA algorithms (or other heuristic algorithms) are also welcome to be introduced into ATEN. By the way, it is very easy to make ATEN as a feature selection tool before applying Best-Fit (i.e. finding all putative Boolean functions). We shall update it later.
   
-  - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what the best threshold is, but we think 10000 iterations for >10 nodes perform well.  
+  - However, we have to admit that this investment takes much time... Different sizes of networks have differnt in-degree. And also the number of PIs always changes in the RFRE framework, and it is not possible to tune parameters for each individual node. Hence in a word, we suggest using a higher startT in the beginning, and probably reduce it and the maxIter according to the result returned of each recursion. We did not try to identify what the best threshold is, but we think 10000 iterations perform well to handle the network with >100 nodes.  
   
- Someone would be interested in how to set the tree size, please find more details in our Supplementary Data. 
-  
-  
+   
  <b>Future work</b><br/> 
   - Besides what we discuss above, another direction is to make it adaptive for different sizes of networks (e.g. implement ATEN using C to speed up ATEN for larger networks). 
   - We also expected our idea can be used for inferrng probabilistic Boolean networks and asynchronous networks.
