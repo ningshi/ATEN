@@ -29,10 +29,7 @@ tree<-list(1,c(2,8),c(4,5))
 The integer 1/2/4 smaller than 5 (the number of nodes) represent the 1st/2nd/5th node respectively; and the integer 8 greater than 5 represents the (8-5)rd node. 
 
 We present the prime implicant using the same way
- ```
- # A prime implicant denotes x1&!x2
- pi<-list(c(1,7))
- ```
+
 
 <b>Network inference</b>:
 
