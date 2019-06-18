@@ -198,7 +198,7 @@ We present the prime implicant using the same way
    
  <b>Future work</b><br/> 
   - Besides what we discuss above, another direction is to make it adaptive for different sizes of networks (e.g. implement ATEN using C to speed up ATEN for larger networks). 
-  - We also expected our idea can be used for inferrng probabilistic Boolean networks and asynchronous networks.
+  - We also expect our idea can be used for inferrng probabilistic Boolean networks and asynchronous networks.
   - Include Best-Fit or other approaches that can help ATEN find the optimal solutions.
 <br/>
 
