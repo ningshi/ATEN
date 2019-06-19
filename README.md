@@ -92,7 +92,7 @@ We present the prime implicant using the same way
 - Step.4 Initilize the parameters used in ATEN
   ```
   # startT, endT and maxIter refer to the upper, lower temperature (on a log10 scale) and the maximum number of iterations used in simulated annealing algorithm, respectively
-  # maxK represents the maximum number of input nodes of the target node. If is normally determined experimentally or empirically
+  # maxK represents the maximum number of input nodes of the target node. It is normally determined experimentally or empirically.
   # rate represents what percentage of PIs with lowest importances would be removed in each recursion
   # nodes represents the number of node in the Boolean network
   parameters<-c(startT=2,endT=-2,maxIter=5000,maxK=5,rate=0.2,nodes=ngenes)
@@ -189,7 +189,7 @@ We present the prime implicant using the same way
   
   - endT, as the probability of acceptation depends on the temperature, we suggest tune it according to the number of acception iterations. You can print the acceptances/the quality of solutions if you want. In general, if there are many acceptances, lower end is better; if no acceptance in a row, raise it a bit.  Normally, we set it as a negative value smaller than -2. 
   
-  - maxIter, the number of iterations. This iterations actually is related to the temperature and the scale of the dataset. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. By default we set it as a value between 5000 and 10000.
+  - maxIter, the number of iterations. If only 5 input nodes are included, then 10000 iterations (>>2^2^5) are not reasonable and therefore we are thinking about introducing Best-fit method. Normally we suggest 10000 iterations if the network size is greater than 10 (2^2^10 possible Boolean functions). And if you find there are still many good solutions in the end, then you may need to increase the number of iterations and tune the endT as well. By default we set it as a value between 5000 and 10000.
   
    And also any other good SA algorithms (or other heuristic algorithms) are also welcome to be introduced into ATEN. By the way, it is very easy to make ATEN as a feature selection tool before applying Best-Fit (i.e. finding all putative Boolean functions). We shall update it later.
   
