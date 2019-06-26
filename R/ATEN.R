@@ -167,7 +167,7 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
   nnodes<-ncol(datalist[[1]])
   no_cores <- parallel::detectCores() - 1
   cl <- parallel::makeCluster(no_cores)
-  clusterSetRNGStream(cl = cl, seed)
+  parallel::clusterSetRNGStream(cl = cl, seed)
   parallel::clusterExport(cl,ls(environment()),envir=environment())
   forest<-parallel::parLapply(cl, 1:B,function(x){
     tree<-saalg(datasamples,parameters[4],NULL,parameters[1],parameters[2],parameters[3])
@@ -265,18 +265,16 @@ findBF<-function(B,PIs,target,parameters,datalist,datasamples,seed){
   nameOfpis<-sapply(PIs,function(x){paste0(sort(x),collapse = "&")},simplify="array")
   count<-1
   repeat{
-    cat("starting RFRE \n")
     no_cores <- parallel::detectCores() - 1
     cl <- parallel::makeCluster(no_cores)
-    clusterSetRNGStream(cl = cl, seed)
+    parallel::clusterSetRNGStream(cl = cl, seed)
     parallel::clusterExport(cl,ls(environment()),envir=environment())
-    forest<-parLapply(cl, 1:B,function(x){
+    forest<-parallel::parLapply(cl, 1:B,function(x){
       tree<-saalg2(datasamples,parameters[4],NULL,parameters[1],parameters[2],parameters[3],PIs,parameters[6])
       return(tree)
     })
     parallel::stopCluster(cl)
     rm(cl)
-    #cat(count)
     Importances<-calImportance(datasamples$outbag,datasamples$respoutbag,forest)
     orders<-order(Importances,decreasing = T)
     Importances<-Importances[orders]
