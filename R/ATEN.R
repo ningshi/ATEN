@@ -215,10 +215,10 @@ findPIs<-function(B,datalist,datasamples,parameters,seed){
         return(name)
       }
     }
-    if(length(new_nameOfpis)==2){
-      if(abs(as.numeric(new_nameOfpis[1])-as.numeric(new_nameOfpis[2]))==nnodes)
-        cat("the node ", target, "might be a self-controlled or an isolated node\n")
-    }
+    #if(length(new_nameOfpis)==2){
+    #  if(abs(as.numeric(PIs[[1]])-as.numeric(PIs[[2]]))==nnodes)
+    #    cat("the node ", target, "might be a self-controlled or an isolated node\n")
+    #}
     new_nameOfpis<-sapply(PIs,function(x){paste0(x,collapse = "&")},simplify="array")
     rs<-sapply(new_nameOfpis,changeName,nnodes)
     rs<-paste0(rs,collapse = " || ")
