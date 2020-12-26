@@ -9,7 +9,7 @@ minimization(tree, nodes)
 \arguments{
 \item{tree}{An And/Or tree}
 
-\item{nodes}{the number of nodes in the Boolean network}
+\item{nodes}{The number of nodes in the Boolean network}
 }
 \value{
 A minimized tree

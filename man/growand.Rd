@@ -15,6 +15,8 @@ growand(tree, subtree, nodes, penalty = FALSE, dec)
 
 \item{penalty}{TRUE or FALSE used to control the size of the tree}
 
+\item{dec}{An argument refers to a specific movement}
+
 \item{fast}{An argument used to indicate whether a sort is needed}
 }
 \value{

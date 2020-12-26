@@ -4,8 +4,16 @@
 \alias{growand2}
 \title{Subtree (And) growth based on PIs}
 \usage{
-growand2(tree, subtree, pis, maxK, currentnodes, allnodes,
-  penalty = FALSE, dec)
+growand2(
+  tree,
+  subtree,
+  pis,
+  maxK,
+  currentnodes,
+  allnodes,
+  penalty = FALSE,
+  dec
+)
 }
 \arguments{
 \item{tree}{An And/Or tree}

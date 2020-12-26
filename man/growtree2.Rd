@@ -4,8 +4,15 @@
 \alias{growtree2}
 \title{Tree growth based on PIs}
 \usage{
-growtree2(tree, pis, maxK, currentnodes, allnodes, penalty = FALSE,
-  fast = TRUE)
+growtree2(
+  tree,
+  pis,
+  maxK,
+  currentnodes,
+  allnodes,
+  penalty = FALSE,
+  fast = TRUE
+)
 }
 \arguments{
 \item{tree}{an And/Or tree}

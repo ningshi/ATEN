@@ -1,7 +1,7 @@
 Package: ATEN
 Type: Package
 Title: ATEN
-Version: 0.1.1
+Version: 0.1.5
 Author: Ning Shi
 Maintainer: Ning Shi <nxs577@cs.bham.ac.uk>
 Description: And/Or Tree Ensemble for inferring Boolean network. 
@@ -9,4 +9,5 @@ Depends: R (>= 3.5.0)
 Encoding: UTF-8
 LazyData: true
 Imports: BoolNet, parallel 
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
+License: GPL-2

@@ -4,8 +4,7 @@
 \alias{growor2}
 \title{Subtree (Or) growth based on PIs}
 \usage{
-growor2(tree, pis, maxK, currentnodes, allnodes, penalty = FALSE,
-  fast = TRUE)
+growor2(tree, pis, maxK, currentnodes, allnodes, penalty = FALSE, fast = TRUE)
 }
 \arguments{
 \item{tree}{an And/Or tree}

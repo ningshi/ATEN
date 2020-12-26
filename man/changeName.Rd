@@ -7,9 +7,9 @@
 changeName(singlename, ngenes)
 }
 \arguments{
-\item{singlename}{a string represents a prime implicant}
+\item{singlename}{A string represents a prime implicant}
 
-\item{ngenes}{the number of nodes in the Boolean network}
+\item{ngenes}{The number of nodes in the Boolean network; the genes in singlename should not be greater than ngenes}
 }
 \value{
 The name of final solution
