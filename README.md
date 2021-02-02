@@ -205,7 +205,7 @@ We present the prime implicant using the same way
 
 ### References: <br/>
 ---
-*Shi, N., Zhu, Z., Tang, K., Parker, D. and He, S., 2019. ATEN: And/Or tree ensemble for inferring accurate Boolean network topology and dynamics. Bioinformatics.*
+*Shi, N., Zhu, Z., Tang, K., Parker, D. and He, S., 2020. ATEN: And/Or tree ensemble for inferring accurate Boolean network topology and dynamics. Bioinformatics, 36(2), pp.578-585.*
 
 *Müssel, C., Hopfensitz, M. and Kestler, H.A., 2010. BoolNet—an R package for generation, reconstruction and analysis of Boolean networks. Bioinformatics, 26(10), pp.1378-1380.*
 
