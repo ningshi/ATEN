@@ -477,7 +477,7 @@ growor2<-function(tree,pis,maxK,currentnodes,allnodes,penalty=FALSE,fast=TRUE){
     }
     if(branch==1)
       dec<-sample(c(1,3),1)
-    subtree<-growand2(tree,tree[[nsub]],pis,maxK,currentnodes,allnodes,penalty,dec)#replace by a new branch
+    subtree<-growand2(tree,tree[[nsub]],pis,(maxK - length(trueNodes)),currentnodes,allnodes,penalty,dec)#replace by a new branch, limit the size as well
     if(is.list(subtree))
       return(subtree)
     if(is.null(subtree)){
